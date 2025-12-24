@@ -8,8 +8,8 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: 'Monthly Finances',
-  description: 'Manage your monthly finances with ease.',
+  title: 'Coinc',
+  description: 'Gerencie suas finanças mensais com facilidade.',
 };
 
 export default function RootLayout({

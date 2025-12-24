@@ -12,19 +12,19 @@ interface SummaryCardsProps {
 }
 
 const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'BRL',
   }).format(amount);
 };
 
 export default function SummaryCards({ transactions, isLoading }: SummaryCardsProps) {
   const { totalIncome, totalExpenses, balance } = useMemo(() => {
     const income = transactions
-      .filter((t) => t.type === 'income')
+      .filter((t) => t.type === 'receita')
       .reduce((acc, t) => acc + t.amount, 0);
     const expenses = transactions
-      .filter((t) => t.type === 'expense')
+      .filter((t) => t.type === 'despesa')
       .reduce((acc, t) => acc + t.amount, 0);
     return {
       totalIncome: income,
@@ -38,8 +38,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total de Receitas</CardTitle>
+            <TrendingUp className="h-6 w-6 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <Skeleton className="h-8 w-3/4" />
@@ -47,8 +47,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-            <TrendingDown className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total de Despesas</CardTitle>
+            <TrendingDown className="h-6 w-6 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <Skeleton className="h-8 w-3/4" />
@@ -56,8 +56,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Balance</CardTitle>
-            <Scale className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Saldo</CardTitle>
+            <Scale className="h-6 w-6 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <Skeleton className="h-8 w-3/4" />
@@ -71,8 +71,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-          <TrendingUp className="h-4 w-4 text-emerald-500" />
+          <CardTitle className="text-sm font-medium">Total de Receitas</CardTitle>
+          <TrendingUp className="h-6 w-6 text-emerald-500" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-emerald-600">{formatCurrency(totalIncome)}</div>
@@ -80,8 +80,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-          <TrendingDown className="h-4 w-4 text-red-500" />
+          <CardTitle className="text-sm font-medium">Total de Despesas</CardTitle>
+          <TrendingDown className="h-6 w-6 text-red-500" />
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-red-600">{formatCurrency(totalExpenses)}</div>
@@ -89,8 +89,8 @@ export default function SummaryCards({ transactions, isLoading }: SummaryCardsPr
       </Card>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Balance</CardTitle>
-          <Scale className="h-4 w-4 text-muted-foreground" />
+          <CardTitle className="text-sm font-medium">Saldo</CardTitle>
+          <Scale className="h-6 w-6 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div

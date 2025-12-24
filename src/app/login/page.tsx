@@ -1,20 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+
 import { auth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { PiggyBank } from "lucide-react";
 import { useAuth } from "@/components/auth-provider";
 import { useEffect } from "react";
-
+import logo from "@/assets/coinc-loco.png";
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
         <path
@@ -65,26 +59,21 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-background p-4">
-            <Card className="w-full max-w-md shadow-2xl">
-                <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <PiggyBank className="h-8 w-8" />
-                    </div>
-                    <CardTitle className="font-headline text-3xl">
-                        Coinc
-                    </CardTitle>
-                    <CardDescription>
-                        Faça login para ter uma visão das suas finanças.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Button onClick={handleSignIn} className="w-full" size="lg">
-                        <GoogleIcon />
-                        Entrar com Google
-                    </Button>
-                </CardContent>
-            </Card>
+        <div className="flex min-h-screen items-center flex-col justify-center bg-background p-4">
+            <div className="mx-auto mb-4 flex h-40  items-center justify-center">
+                <img
+                    src={logo.src}
+                    alt="Coinc Logo"
+                    className="h-full w-full"
+                />
+            </div>
+            <div className="w-2/8">
+
+            <Button onClick={handleSignIn} className="w-full" size="lg">
+                <GoogleIcon />
+                Entrar com Google
+            </Button>
+            </div>
         </div>
     );
 }

@@ -71,7 +71,7 @@ export default function AddTransactionDialog({
         defaultValues: {
             description: "",
             amount: 0,
-            type: "expense",
+            type: "despesa",
             isPaid: false,
             account: "",
             card: "",
@@ -87,7 +87,6 @@ export default function AddTransactionDialog({
             formData.append(key, String(value));
         });
 
-        // ENVOLVA A CHAMADA AQUI:
         startTransition(() => {
             formAction(formData);
         });
@@ -101,15 +100,18 @@ export default function AddTransactionDialog({
     }, [month, user.uid, form]);
 
     useEffect(() => {
-        if (state.message === "Transaction added successfully.") {
+        if (state.message === "Transação adicionada com sucesso.") {
             toast({
-                title: "Success!",
+                title: "Sucesso!",
                 description: state.message,
                 className: "bg-accent text-accent-foreground",
             });
             onOpenChange(false);
             form.reset();
-        } else if (state.message && state.message !== "Invalid form data.") {
+        } else if (
+            state.message &&
+            state.message !== "Dados do formulário inválidos."
+        ) {
             toast({
                 title: "Error",
                 description: state.message,
@@ -124,11 +126,11 @@ export default function AddTransactionDialog({
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle className="font-headline">
-                        Add New Transaction
+                        Adicionar nova transação
                     </DialogTitle>
                     <DialogDescription>
-                        Enter the details of your transaction here. Click save
-                        when you're done.
+                        Insira os detalhes da sua transação aqui. Clique em
+                        salvar quando terminar.
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -149,10 +151,10 @@ export default function AddTransactionDialog({
                             name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Description</FormLabel>
+                                    <FormLabel>Descrição</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="e.g., Groceries"
+                                            placeholder="Ex: Supermercado"
                                             {...field}
                                         />
                                     </FormControl>
@@ -166,7 +168,7 @@ export default function AddTransactionDialog({
                                 name="amount"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Amount</FormLabel>
+                                        <FormLabel>Valor</FormLabel>
                                         <FormControl>
                                             <Input
                                                 type="number"
@@ -190,15 +192,15 @@ export default function AddTransactionDialog({
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue placeholder="Select type" />
+                                                    <SelectValue placeholder="Selecione o tipo" />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="expense">
-                                                    Expense
+                                                <SelectItem value="despesa">
+                                                    Despesa
                                                 </SelectItem>
-                                                <SelectItem value="income">
-                                                    Income
+                                                <SelectItem value="receita">
+                                                    Receita
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -213,10 +215,10 @@ export default function AddTransactionDialog({
                                 name="account"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Account</FormLabel>
+                                        <FormLabel>Observação</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="e.g., Checking"
+                                                placeholder="Ex: Crédito"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -229,10 +231,10 @@ export default function AddTransactionDialog({
                                 name="card"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Card</FormLabel>
+                                        <FormLabel>Cartão</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="e.g., Visa"
+                                                placeholder="Ex: Inter"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -247,10 +249,10 @@ export default function AddTransactionDialog({
                                 name="installments"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Installments</FormLabel>
+                                        <FormLabel>Parcelas</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="e.g., 1/12"
+                                                placeholder="Ex: 1/12"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -262,7 +264,7 @@ export default function AddTransactionDialog({
                                 control={form.control}
                                 name="isPaid"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 mt-7">
+                                    <FormItem className="flex bg-white flex-row items-center space-x-3 space-y-0 rounded-full border-none p-3 mt-7">
                                         <FormControl>
                                             <Checkbox
                                                 checked={field.value}
@@ -270,14 +272,14 @@ export default function AddTransactionDialog({
                                             />
                                         </FormControl>
                                         <div className="space-y-1 leading-none">
-                                            <FormLabel>Paid</FormLabel>
+                                            <FormLabel>Pago</FormLabel>
                                         </div>
                                     </FormItem>
                                 )}
                             />
                         </div>
                         <DialogFooter>
-                            <Button type="submit">Save Transaction</Button>
+                            <Button type="submit">Salvar Transação</Button>
                         </DialogFooter>
                     </form>
                 </Form>

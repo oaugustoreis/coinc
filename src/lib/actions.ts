@@ -1,13 +1,7 @@
 "use server";
 import { adminDb } from "@/lib/firebase-admin";
 import { revalidatePath } from "next/cache";
-import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { TransactionSchema } from "./types";
 
@@ -16,7 +10,7 @@ export async function addTransactionAction(prevState: any, formData: FormData) {
     const isPaid = isPaidValue === "true" || isPaidValue === "on";
     const validatedFields = TransactionSchema.safeParse({
         description: formData.get("description"),
-        amount: Number(formData.get("amount")), // Garanta que o Zod receba um número
+        amount: Number(formData.get("amount")),
         isPaid: isPaid,
         type: formData.get("type"),
         account: formData.get("account"),
@@ -40,10 +34,10 @@ export async function addTransactionAction(prevState: any, formData: FormData) {
             createdAt: serverTimestamp(),
         });
         revalidatePath("/");
-        return { message: "Transaction added successfully.", errors: {} };
+        return { message: "Transação adicionada com sucesso.", errors: {} };
     } catch (error) {
-        console.error("Error adding transaction:", error);
-        return { message: "Failed to add transaction.", errors: {} };
+        console.error("Erro ao adicionar a transação:", error);
+        return { message: "Falha ao adicionar a transação.", errors: {} };
     }
 }
 export async function deleteTransactionAction(
@@ -53,17 +47,16 @@ export async function deleteTransactionAction(
     const transactionId = formData.get("transactionId") as string;
 
     if (!transactionId) {
-        return { message: "Transaction ID is missing." };
+        return { message: "ID da transação está ausente." };
     }
 
     try {
-        // O Admin SDK usa uma sintaxe levemente diferente
         await adminDb.collection("transactions").doc(transactionId).delete();
 
         revalidatePath("/");
-        return { message: "Transaction deleted successfully." };
+        return { message: "Transação excluída com sucesso." };
     } catch (error) {
-        console.error("Error deleting transaction:", error);
-        return { message: "Failed to delete transaction." };
+        console.error("Erro ao excluir a transação:", error);
+        return { message: "Falha ao excluir a transação." };
     }
 }
