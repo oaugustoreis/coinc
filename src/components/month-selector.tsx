@@ -29,7 +29,7 @@ export default function MonthSelector() {
                   'w-full justify-start',
                   selectedMonth === month && 'bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary'
                 )}
-                variant="ghost"
+                variant="default"
               >
                 <Calendar className="h-4 w-4" />
                 <span>{month}</span>

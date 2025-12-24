@@ -27,7 +27,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { useFormState } from 'react-dom';
 import { deleteTransactionAction } from '@/lib/actions';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
@@ -39,7 +39,7 @@ const formatCurrency = (amount: number) => {
 };
 
 function DeleteButton({ transactionId }: { transactionId: string }) {
-    const [state, formAction] = useFormState(deleteTransactionAction, { message: '' });
+    const [state, formAction] = useActionState(deleteTransactionAction, { message: '' });
     const { toast } = useToast();
   
     useEffect(() => {

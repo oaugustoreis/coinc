@@ -18,7 +18,7 @@ import AddTransactionDialog from './add-transaction-dialog';
 import { useEffect, useState } from 'react';
 import type { Transaction } from '@/lib/types';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase/client';
+import { db } from '@/lib/firebase';
 import SummaryCards from './summary-cards';
 import TransactionTable from './transaction-table';
 import { Skeleton } from './ui/skeleton';
