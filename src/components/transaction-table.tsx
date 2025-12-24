@@ -44,12 +44,13 @@ import {
 } from "./ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("pt-BR", {
+const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("pt-BR", {
         style: "currency",
         currency: "BRL",
     }).format(amount);
-};
+
+/* ================= DELETE BUTTON ================= */
 
 function DeleteButton({ transactionId }: { transactionId: string }) {
     const [state, formAction] = useActionState(deleteTransactionAction, {
@@ -58,41 +59,36 @@ function DeleteButton({ transactionId }: { transactionId: string }) {
     const { toast } = useToast();
 
     useEffect(() => {
-        if (state.message === "Transação excluída com sucesso.") {
-            toast({
-                title: "Sucesso",
-                description: state.message,
-            });
-        } else if (state.message) {
-            toast({
-                title: "Error",
-                description: state.message,
-                variant: "destructive",
-            });
-        }
+        if (!state.message) return;
+
+        toast({
+            title: state.message.includes("sucesso") ? "Sucesso" : "Erro",
+            description: state.message,
+            variant: state.message.includes("sucesso")
+                ? "default"
+                : "destructive",
+        });
     }, [state, toast]);
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <div className="w-full text-left p-2 rounded-sm text-sm hover:bg-destructive/10 text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4 inline-block" />
-                    <span>Excluir</span>
+                <div className="flex items-center gap-2 w-full p-2 text-sm text-destructive hover:bg-destructive/10 rounded-sm">
+                    <Trash2 className="h-4 w-4" />
+                    Excluir
                 </div>
             </AlertDialogTrigger>
+
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Tem certeza absoluta?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Esta ação não pode ser desfeita. Isso excluirá
-                        permanentemente esta transação dos nossos servidores.
+                        Esta ação não pode ser desfeita.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter>
-                    <form
-                        action={formAction}
-                        className="w-full flex justify-end gap-2"
-                    >
+                    <form action={formAction} className="flex gap-2">
                         <input
                             type="hidden"
                             name="transactionId"
@@ -119,13 +115,9 @@ export default function TransactionTable({
     if (transactions.length === 0) {
         return (
             <Card>
-                <CardContent className="pt-6">
-                    <div className="text-center text-muted-foreground">
-                        <p className="font-bold text-lg">
-                            Nenhuma transação ainda.
-                        </p>
-                        <p>Adicione sua primeira transação para começar!</p>
-                    </div>
+                <CardContent className="pt-6 text-center text-muted-foreground">
+                    <p className="text-lg font-bold">Nenhuma transação ainda</p>
+                    <p>Adicione sua primeira transação para começar</p>
                 </CardContent>
             </Card>
         );
@@ -134,111 +126,136 @@ export default function TransactionTable({
     return (
         <Card>
             <CardHeader>
-                <CardTitle className="font-headline">
-                    Transações Recentes
-                </CardTitle>
+                <CardTitle>Transações Recentes</CardTitle>
             </CardHeader>
+
             <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Descrição</TableHead>
-                            <TableHead className="text-right">Valor</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Detalhes</TableHead>
-                            <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {transactions.map((transaction) => (
-                            <TableRow key={transaction.id}>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        {transaction.type === "receita" ? (
-                                            <TrendingUp className="h-4 w-4 text-emerald-500" />
-                                        ) : (
-                                            <TrendingDown className="h-4 w-4 text-red-500" />
-                                        )}
-                                        <span className="font-medium">
-                                            {transaction.description}
-                                        </span>
-                                    </div>
-                                </TableCell>
-                                <TableCell
-                                    className={cn(
-                                        "text-right font-semibold",
-                                        transaction.type === "receita"
-                                            ? "text-emerald-600"
-                                            : "text-red-600"
-                                    )}
-                                >
-                                    {transaction.type === "receita" ? "+" : "-"}
-                                    {formatCurrency(transaction.amount)}
-                                </TableCell>
-                                <TableCell>
-                                    <Badge
-                                        variant={
-                                            transaction.isPaid
-                                                ? "default"
-                                                : "secondary"
-                                        }
+                <div className="w-full overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Descrição</TableHead>
+                                <TableHead className="text-right">
+                                    Valor
+                                </TableHead>
+
+                                <TableHead className="hidden md:table-cell">
+                                    Status
+                                </TableHead>
+                                <TableHead className="hidden lg:table-cell">
+                                    Detalhes
+                                </TableHead>
+
+                                <TableHead className="text-right w-[40px]" />
+                            </TableRow>
+                        </TableHeader>
+
+                        <TableBody>
+                            {transactions.map((transaction) => (
+                                <TableRow key={transaction.id}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-2">
+                                            {transaction.type === "receita" ? (
+                                                <TrendingUp className="h-4 w-4 text-emerald-500" />
+                                            ) : (
+                                                <TrendingDown className="h-4 w-4 text-red-500" />
+                                            )}
+                                            <span className="font-medium truncate max-w-[160px]">
+                                                {transaction.description}
+                                            </span>
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell
                                         className={cn(
-                                            transaction.isPaid &&
-                                                "bg-accent text-accent-foreground"
+                                            "text-right font-semibold whitespace-nowrap",
+                                            transaction.type === "receita"
+                                                ? "text-emerald-600"
+                                                : "text-red-600"
                                         )}
                                     >
-                                        {transaction.isPaid ? (
-                                            <ShieldCheck className="h-4 w-4 mr-1" />
-                                        ) : (
-                                            <ShieldAlert className="h-4 w-4 mr-1" />
-                                        )}
-                                        {transaction.isPaid
-                                            ? "Pago"
-                                            : "Pendente"}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        {transaction.card && (
-                                            <Badge variant="outline">
-                                                <CreditCard className="h-4 w-4 mr-1" />
-                                                {transaction.card}
-                                            </Badge>
-                                        )}
-                                        {transaction.account && (
-                                            <Badge variant="outline">
-                                                <Banknote className="h-4 w-4 mr-1" />
-                                                {transaction.account}
-                                            </Badge>
-                                        )}
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button variant="ghost" size="icon">
-                                                <MoreVertical className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem
-                                                onSelect={(e) =>
-                                                    e.preventDefault()
-                                                }
-                                            >
-                                                <DeleteButton
-                                                    transactionId={
-                                                        transaction.id
+                                        {transaction.type === "receita"
+                                            ? "+"
+                                            : "-"}
+                                        {formatCurrency(transaction.amount)}
+                                    </TableCell>
+
+                                    <TableCell className="hidden md:table-cell">
+                                        <Badge
+                                            variant={
+                                                transaction.isPaid
+                                                    ? "default"
+                                                    : "secondary"
+                                            }
+                                            className="gap-1"
+                                        >
+                                            {transaction.isPaid ? (
+                                                <ShieldCheck className="h-4 w-4" />
+                                            ) : (
+                                                <ShieldAlert className="h-4 w-4" />
+                                            )}
+                                            <span className="hidden lg:inline">
+                                                {transaction.isPaid
+                                                    ? "Pago"
+                                                    : "Pendente"}
+                                            </span>
+                                        </Badge>
+                                    </TableCell>
+
+                                    <TableCell className="hidden lg:table-cell">
+                                        <div className="flex gap-1 flex-wrap">
+                                            {transaction.card && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="truncate max-w-[120px]"
+                                                >
+                                                    <CreditCard className="h-4 w-4 mr-1" />
+                                                    {transaction.card}
+                                                </Badge>
+                                            )}
+                                            {transaction.account && (
+                                                <Badge
+                                                    variant="outline"
+                                                    className="truncate max-w-[120px]"
+                                                >
+                                                    <Banknote className="h-4 w-4 mr-1" />
+                                                    {transaction.account}
+                                                </Badge>
+                                            )}
+                                        </div>
+                                    </TableCell>
+
+                                    <TableCell className="text-right whitespace-nowrap">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                >
+                                                    <MoreVertical className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem
+                                                    onSelect={(e) =>
+                                                        e.preventDefault()
                                                     }
-                                                />
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                                                >
+                                                    <DeleteButton
+                                                        transactionId={
+                                                            transaction.id
+                                                        }
+                                                    />
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </CardContent>
         </Card>
     );

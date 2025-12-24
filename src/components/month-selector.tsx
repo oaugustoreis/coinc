@@ -2,8 +2,12 @@
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Calendar } from "lucide-react";
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "./ui/sidebar";
+import {
+    SidebarMenu,
+    SidebarMenuItem,
+    SidebarMenuButton,
+    useSidebar,
+} from "./ui/sidebar";
 import { cn } from "@/lib/utils";
 
 const months = [
@@ -25,7 +29,7 @@ export default function MonthSelector() {
     const searchParams = useSearchParams();
     const currentMonthName = months[new Date().getMonth()];
     const selectedMonth = searchParams.get("month") || currentMonthName;
-
+    const { toggleSidebar } = useSidebar();
     return (
         <div className="p-3">
             <p className="px-2 pb-2 text-xs font-semibold text-muted-foreground">
@@ -38,6 +42,9 @@ export default function MonthSelector() {
                             href={`/?month=${month}`}
                             className="w-full"
                             passHref
+                            onClick={() => {
+                                toggleSidebar();
+                            }}
                         >
                             <SidebarMenuButton
                                 isActive={selectedMonth === month}

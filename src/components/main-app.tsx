@@ -7,6 +7,7 @@ import {
     SidebarInset,
     SidebarProvider,
     SidebarSeparator,
+    SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSearchParams } from "next/navigation";
 import type { User } from "firebase/auth";
@@ -78,9 +79,9 @@ export default function MainApp({ user }: { user: User }) {
 
     return (
         <SidebarProvider>
-            <Sidebar>
+            <Sidebar className="fixed md:relative">
                 <SidebarHeader>
-                    <div className="h-full w-full flex justify-center items-center ">
+                    <div className="h-full w-full  flex justify-center items-center ">
                         <img
                             src={logo.src}
                             alt="Coinc Logo"
@@ -94,13 +95,17 @@ export default function MainApp({ user }: { user: User }) {
                     <MonthSelector />
                 </SidebarContent>
             </Sidebar>
-            <SidebarInset>
-                <main className="flex-1 space-y-4 p-4 pt-6 md:p-8">
-                    <div className="flex items-center justify-between space-y-2">
-                        <h2 className="font-headline text-3xl font-bold tracking-tight">
-                            Visão geral de {selectedMonth}
-                        </h2>
-                        <div className="flex items-center space-x-2">
+            <SidebarInset className="w-full max-w-full md:ml-[var(--sidebar-width)] md:w-[calc(100%-var(--sidebar-width))]">
+                <main className="flex flex-col border max-w-full space-y-4 px-4 py-4 md:px-6">
+                    <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                        <div className="flex justify-between items-center gap-4">
+                            <SidebarTrigger className="md:hidden" />
+
+                            <h2 className="font-headline text-3xl text-center font-bold tracking-tight">
+                                {selectedMonth}
+                            </h2>
+                        </div>
+                        <div className="flex items-center flex justify-center space-x-2">
                             <AddTransactionDialog
                                 open={isDialogOpen}
                                 onOpenChange={setIsDialogOpen}
