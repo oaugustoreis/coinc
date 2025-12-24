@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase/client';
 import { signOut } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { LogOut, MoreHorizontal } from 'lucide-react';

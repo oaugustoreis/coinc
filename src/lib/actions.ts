@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { addDoc, collection, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db } from './firebase';
+import { db } from '@/lib/firebase/server';
 import { TransactionSchema } from './types';
 
 export async function addTransactionAction(prevState: any, formData: FormData) {
