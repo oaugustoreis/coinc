@@ -50,7 +50,6 @@ const formatCurrency = (amount: number) =>
         currency: "BRL",
     }).format(amount);
 
-/* ================= DELETE BUTTON ================= */
 
 function DeleteButton({ transactionId }: { transactionId: string }) {
     const [state, formAction] = useActionState(deleteTransactionAction, {

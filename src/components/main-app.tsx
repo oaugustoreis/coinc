@@ -79,7 +79,7 @@ export default function MainApp({ user }: { user: User }) {
 
     return (
         <SidebarProvider>
-            <Sidebar className="fixed md:relative">
+            <Sidebar className="fixed">
                 <SidebarHeader>
                     <div className="h-full w-full  flex justify-center items-center ">
                         <img
@@ -95,7 +95,7 @@ export default function MainApp({ user }: { user: User }) {
                     <MonthSelector />
                 </SidebarContent>
             </Sidebar>
-            <SidebarInset className="w-full max-w-full md:ml-[var(--sidebar-width)] md:w-[calc(100%-var(--sidebar-width))]">
+            <SidebarInset className="w-full max-w-full  md:w-[calc(100%-var(--sidebar-width))]">
                 <main className="flex flex-col border max-w-full space-y-4 px-4 py-4 md:px-6">
                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                         <div className="flex justify-between items-center gap-4">

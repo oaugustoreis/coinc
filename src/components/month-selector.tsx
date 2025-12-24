@@ -9,6 +9,7 @@ import {
     useSidebar,
 } from "./ui/sidebar";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const months = [
     "Janeiro",
@@ -30,6 +31,7 @@ export default function MonthSelector() {
     const currentMonthName = months[new Date().getMonth()];
     const selectedMonth = searchParams.get("month") || currentMonthName;
     const { toggleSidebar } = useSidebar();
+    const isMobile = useIsMobile();
     return (
         <div className="p-3">
             <p className="px-2 pb-2 text-xs font-semibold text-muted-foreground">
@@ -41,9 +43,10 @@ export default function MonthSelector() {
                         <Link
                             href={`/?month=${month}`}
                             className="w-full"
-                            passHref
-                            onClick={() => {
-                                toggleSidebar();
+                            onClick={(e) => {
+                                if (isMobile) {
+                                    toggleSidebar();
+                                }
                             }}
                         >
                             <SidebarMenuButton
