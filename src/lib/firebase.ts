@@ -12,8 +12,28 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+function createFirebaseApp() {
+    if (getApps().length > 0) {
+      return getApp();
+    }
+  
+    // Check if all required environment variables are present.
+    // This helps prevent the "configuration-not-found" error.
+    const missingVars = Object.entries(firebaseConfig).filter(([, value]) => !value);
+    if (missingVars.length > 0) {
+      console.warn(
+        `Firebase is not configured. Please add the following environment variables to your .env.local file: ${missingVars
+          .map(([key]) => key)
+          .join(', ')}`
+      );
+      // Return a dummy object or handle this case as you see fit
+      // For now, we'll try to initialize but it will likely fail with a clear error.
+    }
+  
+    return initializeApp(firebaseConfig);
+}
+  
+const app = createFirebaseApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
