@@ -64,7 +64,7 @@ export default function MainApp({ user }: { user: User }) {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <h1 className="font-headline text-2xl font-semibold tracking-tight">Monthly Finances</h1>
+          <h1 className="font-headline text-2xl font-semibold tracking-tight">Coinc</h1>
         </SidebarHeader>
         <SidebarContent>
           <UserNav user={user} />
